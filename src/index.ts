@@ -11,6 +11,8 @@ const client = new Client({
 
 client.commands = new Collection();
 
+client.queue = new Map();
+
 const pathCommands = path.join(__dirname, "commands");
 
 const pathEvents = path.join(__dirname, "events");
