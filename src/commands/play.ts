@@ -8,6 +8,7 @@ import {
 } from "@discordjs/voice";
 import { VoiceChannel } from "discord.js";
 import ytdl from "ytdl-core";
+import ytpl from "ytpl";
 import { ServerQueueProps } from "../interfaces/Queue";
 
 const playSong = async (
@@ -42,17 +43,77 @@ const playSong = async (
     serverQueue.songs.shift();
     await playSong(interaction, serverQueue.songs[0]);
   });
+};
 
-  serverQueue.textChannel?.send(`Tocando... **${song.title}**`);
+const addPlaylistToQueue = async (interaction: any, input: string) => {
+  const guildId = interaction.guild.id;
+
+  const serverQueue = interaction.client.queue.get(guildId);
+
+  const playlistData = await ytpl(input);
+
+  const playlistVideos = playlistData.items;
+
+  const songs = playlistVideos.map((video) => ({
+    url: video.url,
+    title: video.title,
+  }));
+
+  if (!serverQueue) {
+    const queueConstruct = await createQueue(interaction, guildId);
+
+    if (!queueConstruct) {
+      throw new Error("Unable to create queue");
+    }
+
+    for (const song of songs) {
+      queueConstruct.songs.push(song);
+    }
+
+    if (queueConstruct.songs?.length) {
+      await playSong(interaction, queueConstruct.songs[0]);
+    }
+  } else {
+    for (const song of songs) {
+      serverQueue.songs.push(song);
+    }
+  }
+
+  return songs.length;
+};
+
+const createQueue = async (interaction: any, guildId: string) => {
+  const queue = interaction.client.queue as Map<string, ServerQueueProps>;
+
+  try {
+    const textChannel = interaction.channel;
+    const queueConstruct: ServerQueueProps = {
+      connection: joinVoiceChannel({
+        channelId: interaction.member.voice.channel.id,
+        guildId: interaction.guild.id,
+        adapterCreator:
+          interaction.member.voice.channel.guild.voiceAdapterCreator,
+      }),
+      playing: true,
+      player: null,
+      songs: [],
+      textChannel,
+    };
+
+    queue.set(guildId, queueConstruct);
+
+    return queueConstruct;
+  } catch (err) {
+    console.error(err);
+    queue.delete(guildId);
+    return;
+  }
 };
 
 const addVideoToQueue = async (interaction: any, input: string) => {
   const guildId = interaction.guild.id;
 
-  const queue = interaction.client.queue as Map<string, ServerQueueProps>;
   const serverQueue = interaction.client.queue.get(guildId);
-
-  const textChannel = interaction.channel;
 
   const songInfo = await ytdl.getInfo(input);
   const song = {
@@ -61,30 +122,16 @@ const addVideoToQueue = async (interaction: any, input: string) => {
   };
 
   if (!serverQueue) {
-    try {
-      const queueConstruct: ServerQueueProps = {
-        connection: joinVoiceChannel({
-          channelId: interaction.member.voice.channel.id,
-          guildId: interaction.guild.id,
-          adapterCreator:
-            interaction.member.voice.channel.guild.voiceAdapterCreator,
-        }),
-        playing: true,
-        player: null,
-        songs: [],
-        textChannel,
-      };
+    const queueConstruct = await createQueue(interaction, guildId);
 
-      queue.set(guildId, queueConstruct);
+    if (!queueConstruct) {
+      throw new Error("Unable to create queue");
+    }
 
-      queueConstruct.songs.push(song);
+    queueConstruct.songs.push(song);
 
-      if (queueConstruct.songs?.length) {
-        await playSong(interaction, queueConstruct.songs[0]);
-      }
-    } catch (err) {
-      console.error(err);
-      queue.delete(guildId);
+    if (queueConstruct.songs?.length) {
+      await playSong(interaction, queueConstruct.songs[0]);
     }
   } else {
     serverQueue.songs.push(song);
@@ -123,10 +170,16 @@ const play = {
 
     const input = interaction.options.getString("input") as string;
 
-    if (ytdl.validateURL(input)) {
-      const song = await addVideoToQueue(interaction, input);
+    if (input.includes("youtu")) {
+      if (ytdl.validateURL(input)) {
+        const song = await addVideoToQueue(interaction, input);
 
-      return interaction.reply(`Queued ${song}`);
+        return interaction.reply(`Queued **${song}**`);
+      } else {
+        const items = await addPlaylistToQueue(interaction, input);
+
+        return interaction.reply(`Queued **${items} songs**`);
+      }
     }
   },
 };

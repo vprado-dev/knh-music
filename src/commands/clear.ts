@@ -4,7 +4,7 @@ import { ServerQueueProps } from "../interfaces/Queue";
 const clear = {
   data: new SlashCommandBuilder()
     .setName("clear")
-    .setDescription("Clear queue"),
+    .setDescription("Clears the queue"),
   async execute(interaction: any) {
     const guildId = interaction.guild.id;
 
