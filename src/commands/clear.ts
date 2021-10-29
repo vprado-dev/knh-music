@@ -4,7 +4,7 @@ import { ServerQueueProps } from "../interfaces/Queue";
 const clear = {
   data: new SlashCommandBuilder()
     .setName("clear")
-    .setDescription("Clears the queue"),
+    .setDescription("Clears the queue and disconnect from voice channel"),
   async execute(interaction: any) {
     const guildId = interaction.guild.id;
 
@@ -13,8 +13,7 @@ const clear = {
     ) as ServerQueueProps;
 
     if (serverQueue) {
-      serverQueue.songs = [];
-      serverQueue.player?.stop();
+      interaction.client.queue.delete(guildId);
       serverQueue.connection.destroy();
 
       return interaction.reply("Cleaned queue succefully");
