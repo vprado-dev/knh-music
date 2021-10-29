@@ -5,7 +5,9 @@ import { Client, Collection, Intents } from "discord.js";
 import fs from "fs-extra";
 import path from "path";
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
+});
 
 client.commands = new Collection();
 
