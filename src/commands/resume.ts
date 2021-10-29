@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { serverQueueProps } from "../interfaces/Queue";
+import { ServerQueueProps } from "../interfaces/Queue";
 
 const resume = {
   data: new SlashCommandBuilder()
@@ -10,7 +10,7 @@ const resume = {
 
     const serverQueue = interaction.client.queue.get(
       guildId,
-    ) as serverQueueProps;
+    ) as ServerQueueProps;
 
     if (serverQueue && !serverQueue.playing) {
       serverQueue.playing = true;

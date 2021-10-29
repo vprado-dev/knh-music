@@ -8,15 +8,15 @@ import {
 } from "@discordjs/voice";
 import { VoiceChannel } from "discord.js";
 import ytdl from "ytdl-core";
-import { serverQueueProps } from "../interfaces/Queue";
+import { ServerQueueProps } from "../interfaces/Queue";
 
 const playSong = async (
   interaction: any,
   song: { title: string; url: string },
 ) => {
-  const queue = interaction.client.queue as Map<string, serverQueueProps>;
+  const queue = interaction.client.queue as Map<string, ServerQueueProps>;
   const guildId = interaction.guild.id;
-  const serverQueue = queue.get(guildId) as serverQueueProps;
+  const serverQueue = queue.get(guildId) as ServerQueueProps;
 
   if (!song) {
     serverQueue.connection.destroy();
@@ -49,7 +49,7 @@ const playSong = async (
 const addVideoToQueue = async (interaction: any, input: string) => {
   const guildId = interaction.guild.id;
 
-  const queue = interaction.client.queue as Map<string, serverQueueProps>;
+  const queue = interaction.client.queue as Map<string, ServerQueueProps>;
   const serverQueue = interaction.client.queue.get(guildId);
 
   const textChannel = interaction.channel;
@@ -62,7 +62,7 @@ const addVideoToQueue = async (interaction: any, input: string) => {
 
   if (!serverQueue) {
     try {
-      const queueConstruct: serverQueueProps = {
+      const queueConstruct: ServerQueueProps = {
         connection: joinVoiceChannel({
           channelId: interaction.member.voice.channel.id,
           guildId: interaction.guild.id,
