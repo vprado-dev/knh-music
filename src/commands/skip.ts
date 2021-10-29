@@ -33,7 +33,7 @@ const skip = {
         default:
           serverQueue.player?.stop();
           return interaction.reply(
-            `Skipped! Now playing **${serverQueue.songs[1].title}`,
+            `Skipped! Now playing **${serverQueue.songs[1].title}**`,
           );
       }
     } else {
