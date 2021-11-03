@@ -4,6 +4,7 @@ import {
   createAudioResource,
   StreamType,
 } from "@discordjs/voice";
+import Soundcloud from "soundcloud.ts";
 import ytdl from "ytdl-core";
 import { ServerQueueProps } from "../interfaces/Queue";
 
@@ -21,7 +22,14 @@ export const playSong = async (
     return;
   }
 
-  const stream = ytdl(song.url, { filter: "audioonly" });
+  let stream: any;
+
+  if (song.url.includes("youtube")) {
+    stream = ytdl(song.url, { filter: "audioonly" });
+  } else {
+    const soundcloud = new Soundcloud();
+    stream = await soundcloud.util.streamTrack(song.url);
+  }
 
   const audioResource = createAudioResource(stream, {
     inputType: StreamType.Arbitrary,
