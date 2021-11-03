@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { VoiceChannel } from "discord.js";
-import Soundcloud from "soundcloud.ts";
+import scdl from "soundcloud-downloader";
 import { getData } from "spotify-url-info";
 import ytdl from "ytdl-core";
 import ytsr from "ytsr";
@@ -67,7 +67,7 @@ const play = {
 
       switch (data.type) {
         case "playlist":
-          await interaction.deferReply();
+          await interaction.reply("Working on it");
 
           const items = await addSpotifyPlaylist(interaction, data);
 
@@ -83,22 +83,27 @@ const play = {
       }
     }
 
-    if (input.includes("soundcloud.com")) {
-      const soundcloud = new Soundcloud();
-      if (input.includes("sets")) {
-        await interaction.deferReply();
-
-        const playlist = await soundcloud.playlists.getV2(input);
+    if (scdl.isValidUrl(input)) {
+      await interaction.reply("Working on it");
+      if (scdl.isPlaylistURL(input)) {
+        const playlist = await scdl.getSetInfo(input);
 
         const tracks = playlist.tracks;
 
-        const items = await addSoundcloudPlaylist(
-          interaction,
-          soundcloud,
-          tracks,
-        );
+        const items = await addSoundcloudPlaylist(interaction, tracks);
 
         return interaction.editReply(`Queued **${items} songs**`);
+      } else {
+        const track = await scdl.getInfo(input);
+
+        const song = {
+          title: track.title || "",
+          url: track.permalink_url || "",
+        };
+
+        await addVideoToQueue(interaction, song);
+
+        return interaction.editReply(`Queued **${song.title}**`);
       }
     }
 

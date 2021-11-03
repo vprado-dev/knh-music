@@ -1,11 +1,10 @@
-import Soundcloud, { SoundcloudTrackV2 } from "soundcloud.ts";
+import { TrackInfo } from "soundcloud-downloader/src/info";
 import { createQueue } from "./createQueue";
 import { playSong } from "./playSong";
 
 export const addSoundcloudPlaylist = async (
   interaction: any,
-  soundcloud: Soundcloud,
-  tracks: SoundcloudTrackV2[],
+  tracks: TrackInfo[],
 ) => {
   const guildId = interaction.guild.id;
 

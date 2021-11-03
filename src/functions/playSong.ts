@@ -4,7 +4,7 @@ import {
   createAudioResource,
   StreamType,
 } from "@discordjs/voice";
-import Soundcloud from "soundcloud.ts";
+import scdl from "soundcloud-downloader";
 import ytdl from "ytdl-core";
 import { ServerQueueProps } from "../interfaces/Queue";
 
@@ -23,12 +23,10 @@ export const playSong = async (
   }
 
   let stream: any;
-
-  if (song.url.includes("youtube")) {
+  if (ytdl.validateURL(song.url)) {
     stream = ytdl(song.url, { filter: "audioonly" });
   } else {
-    const soundcloud = new Soundcloud();
-    stream = await soundcloud.util.streamTrack(song.url);
+    stream = await scdl.download(song.url);
   }
 
   const audioResource = createAudioResource(stream, {
