@@ -339,6 +339,17 @@
     "@typescript-eslint/types" "5.2.0"
     eslint-visitor-keys "^3.0.0"
 
+"@vncsprd/soundcloud-downloader@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@vncsprd/soundcloud-downloader/-/soundcloud-downloader-1.2.0.tgz#2909cbf9d826dd83c0500a8ea783dfc2001aebbd"
+  integrity sha512-0i8JYrO/NgBLwXEx+XZ0WlX4tb0851qeA8kQIZLqG9Ai4GwxDlNMRZGrP3FowFt0XnEf38e2TjIuSHyLL04AVQ==
+  dependencies:
+    "@babel/runtime" "^7.10.3"
+    axios "^0.21.0"
+    dotenv "^8.2.0"
+    m3u8stream "^0.8.0"
+    soundcloud-key-fetch "^1.0.10"
+
 abort-controller@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/abort-controller/-/abort-controller-3.0.0.tgz#eaf54d53b62bae4138e809ca225c8439a6efb392"
@@ -1802,17 +1813,6 @@ slice-ansi@^4.0.0:
     ansi-styles "^4.0.0"
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
-
-soundcloud-downloader@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/soundcloud-downloader/-/soundcloud-downloader-1.0.0.tgz#d5b345ce087f62f1a0b47f7b0f9c1f945b3f6620"
-  integrity sha512-UaEGaO+NASmTKJduGGgFjWVixLKFbvkxuX1oIYseZCsdEAg4q3o+Zn5Q9NWjQ1y0QciPkhEDnS22wnPb3XZ7pw==
-  dependencies:
-    "@babel/runtime" "^7.10.3"
-    axios "^0.21.0"
-    dotenv "^8.2.0"
-    m3u8stream "^0.8.0"
-    soundcloud-key-fetch "^1.0.10"
 
 soundcloud-key-fetch@^1.0.10:
   version "1.0.11"

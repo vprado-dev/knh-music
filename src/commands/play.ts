@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { VoiceChannel } from "discord.js";
-import scdl from "soundcloud-downloader";
+import scdl from "@vncsprd/soundcloud-downloader/dist";
 import { getData } from "spotify-url-info";
 import ytdl from "ytdl-core";
 import ytsr from "ytsr";
@@ -103,7 +103,7 @@ const play = {
 
         await addVideoToQueue(interaction, song);
 
-        return interaction.editReply(`Queued **${song.title}**`);
+        return await interaction.editReply(`Queued **${song.title}**`);
       }
     }
 

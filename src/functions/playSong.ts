@@ -4,7 +4,7 @@ import {
   createAudioResource,
   StreamType,
 } from "@discordjs/voice";
-import scdl from "soundcloud-downloader";
+import scdl from "@vncsprd/soundcloud-downloader/dist";
 import ytdl from "ytdl-core";
 import { ServerQueueProps } from "../interfaces/Queue";
 
