@@ -20,7 +20,7 @@ const play = {
       });
     }
 
-    const queue = client.distube.getQueue(interaction);
+    const queue = await client.distube.getQueue(interaction);
     const query = interaction.options.get("input").value;
 
     if (queue) {

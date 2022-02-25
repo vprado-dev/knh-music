@@ -5,7 +5,7 @@ const ready = async (client: Client) => {
   const guildIds = client.guilds.cache.map((guild) => guild.id);
 
   for (const guildId of guildIds) {
-    await deployCommands(guildId);
+    deployCommands(guildId);
   }
 
   client.user?.setPresence({

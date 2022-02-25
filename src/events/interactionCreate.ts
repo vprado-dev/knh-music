@@ -8,7 +8,7 @@ const interactionCreate = async (client: Client, interaction: Interaction) => {
   if (!command) return;
 
   try {
-    await command.execute(interaction, client);
+    command.execute(interaction, client);
   } catch (error) {
     console.error(error);
     return interaction.reply({

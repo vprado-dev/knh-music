@@ -1,11 +1,11 @@
 import { Client } from "discord.js";
-import Distube from "distube";
+import { DisTube } from "distube";
 import { SoundCloudPlugin } from "@distube/soundcloud";
 import { SpotifyPlugin } from "@distube/spotify";
 import { YtDlpPlugin } from "@distube/yt-dlp";
 
-export const setupDistube = (client: Client) =>
-  new Distube(client, {
+export const distube = (client: Client) =>
+  new DisTube(client, {
     youtubeDL: false,
     leaveOnEmpty: true,
     emptyCooldown: 30,
@@ -13,6 +13,5 @@ export const setupDistube = (client: Client) =>
     emitNewSongOnly: true,
     updateYouTubeDL: true,
     nsfw: true,
-    youtubeCookie: process.env.ytcookie,
     plugins: [new SoundCloudPlugin(), new SpotifyPlugin(), new YtDlpPlugin()],
   });
